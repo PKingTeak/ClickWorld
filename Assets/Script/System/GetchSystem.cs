@@ -1,16 +1,16 @@
 using UnityEngine;
+using System;
+using System.Collections.Generic;
 
-public class GetchSystem : MonoBehaviour
+
+
+public class GetchSystem 
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
+    Dictionary<string, List<WeaponData>> weaponDic;
+
+    public void ExecuteGetch(int ClickCount)
+    { 
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

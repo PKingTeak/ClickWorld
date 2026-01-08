@@ -20,7 +20,7 @@ public enum ObjectRank
 
 }
 
-[CreateAssetMenu(fileName = "Data" , menuName = "Data/Weapon")]
+[CreateAssetMenu(fileName = "SOData" , menuName = "SOData/Weapon")]
 public class WeaponData : ScriptableObject
 {
     [SerializeField]
@@ -30,7 +30,11 @@ public class WeaponData : ScriptableObject
     [SerializeField]
     private ObjectRank m_WeaponRank;
     [SerializeField]
-    private SpriteRenderer m_SpriteRenderer;
+    private Sprite m_WeaponSprite;
+
+    public string WeaponName => m_WeaponName;
+    public ObjectRank WeaponRank => m_WeaponRank;
+    public Sprite WeaponSprite => m_WeaponSprite;
 }
 
 
