@@ -19,8 +19,8 @@ public class WeaponManager : MonoBehaviour
             Debug.Log("[WeaponManager] 데이터가 없습니다.");
             return;
         }
-    
 
+        ItemEventBus.PublishItem(data);
 
     }
 

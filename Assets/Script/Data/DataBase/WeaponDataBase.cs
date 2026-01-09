@@ -18,11 +18,13 @@ public class WeaponDataBase : MonoBehaviour
 
         foreach (var weapon in allWeapons)
         {
-            if (!weaponDic.ContainsKey(weapon.WeaponRank))
+            ObjectRank rank = weapon.ItemRank;
+
+            if (!weaponDic.ContainsKey(rank))
             {
-                weaponDic[weapon.WeaponRank] = new List<WeaponData>();
+                weaponDic[rank] = new List<WeaponData>();
             }
-            weaponDic[weapon.WeaponRank].Add(weapon);
+            weaponDic[rank].Add(weapon);
 
         }
     }
