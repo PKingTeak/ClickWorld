@@ -5,12 +5,18 @@ using UnityEngine;
 public class WeaponManager : MonoBehaviour
 {
     GameManager gameManger;
+
+    private WeaponDataBase dataTable;
+
+    public WeaponDataBase WeaponTable { get { return dataTable; } }
     
     
     public void Init(GameManager gm)
     {
         gameManger = gm;
+        dataTable = new WeaponDataBase();
     }
+     
 
     public void RegisterWeapon(WeaponData data)
     {
@@ -20,8 +26,9 @@ public class WeaponManager : MonoBehaviour
             return;
         }
 
-        ItemEventBus.PublishItem(data);
+        EventBus.PublishItem(data);
 
     }
+
 
 }

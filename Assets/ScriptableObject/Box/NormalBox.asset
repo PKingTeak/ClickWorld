@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: NormalBox
   m_EditorClassIdentifier: Assembly-CSharp::BoxData
   boxname: 
-  obtainLevel: 0100000002000000
+  obtainLevel: 010000000200000003000000
+  obtainChance:
+  - 8999
+  - 1000
+  - 1
   requireClickMaxLevel: 30
   requireClickNextLevel: 15

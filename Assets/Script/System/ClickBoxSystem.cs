@@ -11,6 +11,8 @@ public class ClickBoxSystem : MonoBehaviour
     public static event Action OnSummonEnd;
 
 
+    GetchSystem getchSystem = new GetchSystem();
+
     [Header("Setting")]
     [SerializeField] private float SummonDuration;
 
@@ -19,7 +21,11 @@ public class ClickBoxSystem : MonoBehaviour
     private Coroutine SummonCoroutine;
 
     //박스도 등급에 따라서 시간을 정해야될듯
- 
+
+    [Header("박스 정보")]
+    [SerializeField] private BoxData testboxdata; //나중에 리스트로 변경 예정 지금 
+
+
     [ContextMenu("Test Start Summon")]
     public void StartSummon()
     {
@@ -74,7 +80,7 @@ public class ClickBoxSystem : MonoBehaviour
 
         isSummoning = false; //소환 종료
         Debug.Log($"{curClickCount}");
-
+        getchSystem.ExecuteGetch(testboxdata,curClickCount);
         OnSummonEnd?.Invoke();
        
     }

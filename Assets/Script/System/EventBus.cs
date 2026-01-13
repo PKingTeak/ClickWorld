@@ -12,10 +12,9 @@ public interface IItemData
 }
 
 
-public static class ItemEventBus
+public static class EventBus
 {
     public static event Action<IItemData> OnItemObtained;
-
     public static void PublishItem(IItemData item)
     {
         if (item == null)
@@ -26,3 +25,4 @@ public static class ItemEventBus
         OnItemObtained?.Invoke(item);
     }
 }
+

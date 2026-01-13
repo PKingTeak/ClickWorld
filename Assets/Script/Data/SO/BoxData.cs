@@ -10,6 +10,9 @@ public class BoxData : ScriptableObject
 
     [Header("등장 가능 등급")]
     public List<int> obtainLevel = new List<int>();
+    [Header("확률")]
+    public List<float> obtainChance = new List<float>();
+
     [Header("클릭 관련 정보")]
     public int requireClickMaxLevel;
     public int requireClickNextLevel;
