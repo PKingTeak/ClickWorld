@@ -6,16 +6,18 @@ using UnityEngine;
 
 public class GameManager : MonoSingleton<GameManager>
 {
-    private WeaponManager M_weapon = new WeaponManager();
+    [SerializeField]
+    private WeaponManager M_weapon;
 
-    GetchSystem System;
+    GetchSystem System_Getch;
 
     public WeaponManager WeaponManager => M_weapon;
 
     private void Awake()
     {
+        
         M_weapon.Init(this);
-        System = new GetchSystem();
+        System_Getch = new GetchSystem();
     
     }
 

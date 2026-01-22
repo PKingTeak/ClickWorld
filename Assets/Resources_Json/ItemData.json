@@ -4,7 +4,8 @@
       "Key": "sword",
       "Description": "간단한 검이다.",
       "Rank": "normal",
-      "ItemType": "weapon"
+      "ItemType": "weapon",
+      "IconPath": "ItemImage/Sword/WoodSword"
     }
   ]
 }

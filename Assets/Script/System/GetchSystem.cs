@@ -9,12 +9,25 @@ using Unity.VisualScripting;
 
 public class GetchSystem
 {
+    private GetchSystem instance;
+    public GetchSystem Instance
+    {
+        get 
+        {
+            if (instance == null)
+            { 
+            instance = new GetchSystem();
+            }
+            return instance;
+        }
+    }
+    
     [SerializeField]
     const int MAXChanceNum = 10000;
     [SerializeField]
     private const float clickbonus = 0.05f;
 
-
+    
     public ObjectRank ExecuteGetch(BoxData curboxData, int curClickCount)
     {
 

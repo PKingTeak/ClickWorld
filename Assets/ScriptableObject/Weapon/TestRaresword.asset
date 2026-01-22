@@ -16,4 +16,4 @@ MonoBehaviour:
   m_WeaponInfo: 
   m_WeaponType: 0
   m_WeaponRank: 1
-  m_WeaponSprite: {fileID: 0}
+  m_WeaponSprite: {fileID: 21300000, guid: 6379c3d475d16d34eb0e21b494c7ceae, type: 2}

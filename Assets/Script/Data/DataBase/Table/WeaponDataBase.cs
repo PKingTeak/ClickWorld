@@ -1,19 +1,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponDataBase : MonoBehaviour
+public class WeaponDataBase
 {
     private Dictionary<ObjectRank, List<WeaponData>> weaponDic = new Dictionary<ObjectRank, List<WeaponData>>();
 
     [SerializeField] private List<WeaponData> allWeapons;
-
-    private void Awake()
+    public WeaponDataBase()
     {
-        InitData();
+       // this.InitData();
+    
     }
 
-
-    private void InitData()
+    public void InitData()
     {
 
         foreach (var weapon in allWeapons)
@@ -45,7 +44,15 @@ public class WeaponDataBase : MonoBehaviour
     }
 
 
-
+    public void SettingWeaponData(List<WeaponData> list)
+    {
+        if (list.Count <= 0)
+        {
+            return;
+        }
+        allWeapons = list;
+        //테스트용 로더가 생기면 없어질 메서드
+    }
 
 
 }

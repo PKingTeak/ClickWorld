@@ -1,12 +1,29 @@
-using JetBrains.Annotations;
+using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 
 public class WeaponManager : MonoBehaviour
 {
+    private WeaponManager instance;
+    public WeaponManager Instance 
+    {
+        get
+        { 
+            if (instance == null)
+            {
+                instance = new WeaponManager();
+            }
+            return instance;
+        }
+    }
+
+
+
     GameManager gameManger;
 
     private WeaponDataBase dataTable;
+    [SerializeField]
+    private List<WeaponData> TestTable = new();
 
     public WeaponDataBase WeaponTable { get { return dataTable; } }
     
@@ -14,7 +31,11 @@ public class WeaponManager : MonoBehaviour
     public void Init(GameManager gm)
     {
         gameManger = gm;
-        dataTable = new WeaponDataBase();
+        dataTable = new WeaponDataBase();//생성과 동시에 Init()하니까 어쩌피
+        dataTable.SettingWeaponData(TestTable);
+        dataTable.InitData();
+        
+
     }
      
 
