@@ -8,12 +8,17 @@ public class WeaponDataBase
     [SerializeField] private List<WeaponData> allWeapons;
     public WeaponDataBase()
     {
-       // this.InitData();
+     
     
     }
 
     public void InitData()
     {
+        if (allWeapons == null)
+        {
+            Debug.Log("[WeaponDataBase] 아무것도 들어오지 않았습니다. ");
+            return;
+        }
 
         foreach (var weapon in allWeapons)
         {

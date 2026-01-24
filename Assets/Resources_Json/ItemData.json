@@ -1,11 +1,25 @@
 {
   "Items": [
     {
-      "Key": "sword",
-      "Description": "간단한 검이다.",
+      "Key": "sword_wood",
+      "Description": "나무로 만든 검이다",
       "Rank": "normal",
-      "ItemType": "weapon",
+      "ItemType": "weapontype",
       "IconPath": "ItemImage/Sword/WoodSword"
+    },
+    {
+      "Key": "sword_steel",
+      "Description": "철로 만든검이다 끝이 날카로우니 조심하자",
+      "Rank": "rare",
+      "ItemType": "weapontype",
+      "IconPath": "ItemImage/Sword/SteelSword"
+    },
+    {
+      "Key": "sword_Epic",
+      "Description": "에픽거미거미 검이다",
+      "Rank": "epic",
+      "ItemType": "weapontype",
+      "IconPath": "ItemImage/Sword/EpicSword"
     }
   ]
 }

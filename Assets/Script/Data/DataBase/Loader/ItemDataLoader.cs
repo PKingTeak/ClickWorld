@@ -1,14 +1,12 @@
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-
-
-
 using UnityEngine.ResourceManagement.AsyncOperations;
+using Newtonsoft.Json;
+using Unity.VisualScripting;
+
 
 
 [Serializable]
@@ -20,55 +18,88 @@ public class ItemRowLIst<T>
 
 public static class AddressableTextLoader
 {
-    public static async Task<string> LoadJsonAsync(string key)
+    public static async Task<List<T>> LoadJsonAsync<T>(string key)
     {
-        AsyncOperationHandle<TextAsset> handle = Addressables.LoadAssetAsync<TextAsset>(key);
+        Debug.Log($"[ItemDataLoader] 로딩 시작 키값 : {key}");
+        var handle = Addressables.LoadAssetAsync<TextAsset>(key);
 
         TextAsset txt = await handle.Task;
-        Addressables.Release(handle);
-
-        return null;
-       // return JsonConvert.DeserializeObject<List<T>>(txt.text);
-
-
-
-    }
-}
-public class ItemDataLoader
-{
-    public async Task<List<IItemData>> LoadData(string path)
-    {
-        var textAsset = Resources.Load<TextAsset>(path);
-        var json = textAsset.text;
-
-
-        var wrapper = JsonUtility.FromJson<ItemRowLIst<WeaponWrapper>>(json);
-
-        var result = new List<IItemData>();
-        foreach (var row in wrapper.items)
+        if (txt == null)
         {
-            result.Add(Convert(row));
+            Debug.Log($"[ItemDataLoader] 데이터가 없습니다. ");
+            return null;
         }
 
-        return result;
+
+        string jsonText = txt.text;
+        Addressables.Release(handle);
+
+        try
+        {
+            var wrapper = JsonConvert.DeserializeObject<ItemRowLIst<T>>(jsonText);
+
+            if (wrapper != null && wrapper.items != null)
+            {
+                return wrapper.items;
+            }
+            else
+            {
+                Debug.LogWarning($"[Loader] '{key}' 파싱 결과가 비어있습니다. JSON 구조가 {{ \"items\": [] }} 인지 확인하세요.");
+                return new List<T>();
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[Loader] JSON 파싱 에러: {ex.Message}");
+            return null;
+
+        }
+
+
 
     }
-
-    private WeaponData Convert(WeaponWrapper row)
+    public class ItemDataLoader
     {
-        var data = ScriptableObject.CreateInstance<WeaponData>();
+        public async Task<List<IItemData>> LoadData(string key)
+        {
+            // 1. JSON 로드 (위의 깔끔해진 함수 사용)
+            List<WeaponWrapper> wrappers = await AddressableTextLoader.LoadJsonAsync<WeaponWrapper>(key);
 
-        var type = (WeaponType)row.weaponType;
-        var rank = (ObjectRank)row.weaponRank;
-        var sprite = string.IsNullOrEmpty(row.spritePath) ? null : Resources.Load<Sprite>(row.spritePath);
+            var result = new List<IItemData>();
+
+            // 2. 데이터 변환 (Wrapper -> ScriptableObject)
+            if (wrappers != null)
+            {
+                foreach (var row in wrappers)
+                {
+                    result.Add(Convert(row));
+                }
+            }
+            return result;
+
+        }
+
+        // Wrapper 데이터를 실제 게임 데이터(ScriptableObject)로 변환
+        private WeaponData Convert(WeaponWrapper row)
+        {
+            var data = ScriptableObject.CreateInstance<WeaponData>();
+
+            // Enum 변환 (숫자 -> Enum)
+            var type = (WeaponType)row.weaponType;
+            var rank = (ObjectRank)row.weaponRank;
+
+            // 이미지 로드 (경로가 있을 때만)
+            Sprite sprite = null;
+            if (!string.IsNullOrEmpty(row.spritePath))
+            {
+                sprite = Resources.Load<Sprite>(row.spritePath);
+            }
+
+            data.Init(row.weaponName, row.weaponInfo, type, rank, sprite);
+            return data;
+        }
 
 
-        data.Init(row.weaponName, row.weaponInfo, type, rank, sprite);
-        return data;
 
     }
-
-
-
-
 }

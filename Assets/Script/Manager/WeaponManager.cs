@@ -2,6 +2,11 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 
+/*
+ * 일단 테이블 데이터를 결국에 넣어서 가져와야 한다. Json에서 데이터 매니저를 생성해서 
+ * 모든 데이터를 해당 매니저를 통해서 가져올 수 있도록 해야할듯 함. 
+ */
+
 public class WeaponManager : MonoBehaviour
 {
     private WeaponManager instance;
@@ -33,7 +38,7 @@ public class WeaponManager : MonoBehaviour
         gameManger = gm;
         dataTable = new WeaponDataBase();//생성과 동시에 Init()하니까 어쩌피
         dataTable.SettingWeaponData(TestTable);
-        dataTable.InitData();
+     //   dataTable.InitData();
         
 
     }

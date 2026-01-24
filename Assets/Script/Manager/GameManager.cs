@@ -13,13 +13,14 @@ public class GameManager : MonoSingleton<GameManager>
 
     public WeaponManager WeaponManager => M_weapon;
 
-    private void Awake()
+    protected override void Awake()
     {
-        
+        base.Awake();        
         M_weapon.Init(this);
         System_Getch = new GetchSystem();
     
     }
+
 
 
 }
