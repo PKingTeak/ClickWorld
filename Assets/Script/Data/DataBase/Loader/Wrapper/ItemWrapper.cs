@@ -1,7 +1,19 @@
 using Unity.Collections;
 using UnityEngine;
+using System.Collections.Generic;
 
 
+public class ItemWrapper
+{
+    public string ItemName;
+    public string ItemInfo;
+    public ItemCategory ItemCategory;
+    public ObjectRank ItemRank;
+    public string SpritePath;
+
+    public int DetailType;
+    
+}
 
 
 public class WeaponWrapper
@@ -9,7 +21,7 @@ public class WeaponWrapper
     public string weaponName;
     public string weaponInfo;
     public WeaponType weaponType;
-    public int weaponRank;
+    public ObjectRank weaponRank;
     public string spritePath;
 }
 

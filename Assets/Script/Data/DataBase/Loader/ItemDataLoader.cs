@@ -63,7 +63,7 @@ public static class AddressableTextLoader
         public async Task<List<IItemData>> LoadData(string key)
         {
             // 1. JSON 로드 (위의 깔끔해진 함수 사용)
-            List<WeaponWrapper> wrappers = await AddressableTextLoader.LoadJsonAsync<WeaponWrapper>(key);
+            List<ItemWrapper> wrappers = await AddressableTextLoader.LoadJsonAsync<ItemWrapper>(key);
 
             var result = new List<IItemData>();
 
@@ -72,7 +72,17 @@ public static class AddressableTextLoader
             {
                 foreach (var row in wrappers)
                 {
-                    result.Add(Convert(row));
+                    switch (row.ItemCategory)
+                    {
+                        case ItemCategory.WeaponItem:
+                            result.Add(WeaponConvert(row));
+                            //무기 정보를 넘겨 줘야함
+                            break;
+
+                        case ItemCategory.PetItem:
+                            //아직 미구현
+                            break;
+                    }
                 }
             }
             return result;
@@ -80,22 +90,22 @@ public static class AddressableTextLoader
         }
 
         // Wrapper 데이터를 실제 게임 데이터(ScriptableObject)로 변환
-        private WeaponData Convert(WeaponWrapper row)
+        private WeaponData WeaponConvert(ItemWrapper row)
         {
             var data = ScriptableObject.CreateInstance<WeaponData>();
 
-            // Enum 변환 (숫자 -> Enum)
-            var type = (WeaponType)row.weaponType;
-            var rank = (ObjectRank)row.weaponRank;
+            var rank = row.ItemRank;
+
+            WeaponType type = (WeaponType)row.DetailType;
 
             // 이미지 로드 (경로가 있을 때만)
             Sprite sprite = null;
-            if (!string.IsNullOrEmpty(row.spritePath))
+            if (!string.IsNullOrEmpty(row.SpritePath))
             {
-                sprite = Resources.Load<Sprite>(row.spritePath);
+                sprite = Resources.Load<Sprite>(row.SpritePath);
             }
 
-            data.Init(row.weaponName, row.weaponInfo, type, rank, sprite);
+            data.Init(row.ItemName, row.ItemInfo, type, rank, sprite);
             return data;
         }
 

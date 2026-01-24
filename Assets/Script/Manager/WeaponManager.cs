@@ -36,11 +36,6 @@ public class WeaponManager : MonoBehaviour
     public void Init(GameManager gm)
     {
         gameManger = gm;
-        dataTable = new WeaponDataBase();//생성과 동시에 Init()하니까 어쩌피
-        dataTable.SettingWeaponData(TestTable);
-     //   dataTable.InitData();
-        
-
     }
      
 

@@ -64,7 +64,7 @@ public class GetchSystem
             }
         }
 
-        var testweapon = GameManager.Instance.WeaponManager.WeaponTable.GetRandomWeaponByRank(rank);
+        var testweapon = DataManager.Instance.WeaponDB.GetRandomWeaponByRank(rank);
         
         Debug.Log($"{testweapon.ItemName},{rank}");
 

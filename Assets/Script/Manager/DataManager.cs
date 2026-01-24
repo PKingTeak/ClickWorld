@@ -3,6 +3,9 @@ using System.Threading.Tasks;
 using UnityEngine;
 using static AddressableTextLoader;
 
+
+
+
 public class DataManager : MonoSingleton<DataManager>
 {
     public WeaponDataBase WeaponDB { get; private set; } = new WeaponDataBase();
@@ -43,9 +46,7 @@ public class DataManager : MonoSingleton<DataManager>
             }
         }
              
-        WeaponDB.SettingWeaponData(weaponOnlyList);
-             
-        WeaponDB.InitData();
+        WeaponDB.InitData(weaponOnlyList); //무기는 무기들만 
 
         Debug.Log($"[DataManager] 데이터 초기화 완료! 로드된 무기 개수: {weaponOnlyList.Count}");
     }

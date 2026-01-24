@@ -5,22 +5,21 @@ public class WeaponDataBase
 {
     private Dictionary<ObjectRank, List<WeaponData>> weaponDic = new Dictionary<ObjectRank, List<WeaponData>>();
 
-    [SerializeField] private List<WeaponData> allWeapons;
     public WeaponDataBase()
     {
      
     
     }
 
-    public void InitData()
+    public void InitData(List<WeaponData> list)
     {
-        if (allWeapons == null)
+        if (list == null)
         {
             Debug.Log("[WeaponDataBase] 아무것도 들어오지 않았습니다. ");
             return;
         }
 
-        foreach (var weapon in allWeapons)
+        foreach (var weapon in list)
         {
             ObjectRank rank = weapon.ItemRank;
 
@@ -49,15 +48,6 @@ public class WeaponDataBase
     }
 
 
-    public void SettingWeaponData(List<WeaponData> list)
-    {
-        if (list.Count <= 0)
-        {
-            return;
-        }
-        allWeapons = list;
-        //테스트용 로더가 생기면 없어질 메서드
-    }
-
+    
 
 }
