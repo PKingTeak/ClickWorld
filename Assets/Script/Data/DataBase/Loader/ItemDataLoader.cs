@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 using Newtonsoft.Json;
+using TMPro;
 using Unity.VisualScripting;
 
 
@@ -89,6 +89,26 @@ public static class AddressableTextLoader
 
         }
 
+        public async Task<List<BoxData>> LoadBoxData(string key)
+        {
+            List<BoxWrpper> wrappers = await AddressableTextLoader.LoadJsonAsync<BoxWrpper>(key);
+
+            var result = new List<BoxData>();
+
+            if (wrappers != null)
+            {
+                foreach (var row in wrappers)
+                {
+                    result.Add(BoxConvert(row));
+                    
+                }
+            }
+            return result;
+
+
+        }
+
+
         // Wrapper 데이터를 실제 게임 데이터(ScriptableObject)로 변환
         private WeaponData WeaponConvert(ItemWrapper row)
         {
@@ -106,6 +126,31 @@ public static class AddressableTextLoader
             }
 
             data.Init(row.ItemName, row.ItemInfo, type, rank, sprite);
+            return data;
+        }
+
+
+        private BoxData BoxConvert(BoxWrpper row)
+        {
+            var data = new BoxData();
+
+            List<int> level = new List<int>();
+            List<float> chance = new List<float>();
+
+            string[] words = row.obtainLevel.Split('|');
+            for (int i = 0; i < words.Length; i++)
+            {
+                level.Add(int.Parse(words[i]));
+            }
+
+            words = row.obtainChance.Split('|');
+            for (int i = 0; i < words.Length; i++)
+            {
+                chance.Add(int.Parse(words[i]));
+            }
+
+            data.initData(row.boxId,row.boxname, level, chance, int.Parse(row.obtainLevel), int.Parse(row.obtainChance));
+
             return data;
         }
 

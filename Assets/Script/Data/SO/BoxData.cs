@@ -4,7 +4,7 @@ using Unity.Collections;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "BoxData", menuName = "SOData/BoxData")]
-public class BoxData : ScriptableObject
+public class BoxDataSO : ScriptableObject
 {
     public string boxname;
 
@@ -17,3 +17,5 @@ public class BoxData : ScriptableObject
     public int requireClickMaxLevel;
     public int requireClickNextLevel;
 }
+
+

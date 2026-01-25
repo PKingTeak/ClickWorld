@@ -15,6 +15,18 @@ public class ItemWrapper
     
 }
 
+public class BoxWrpper
+{
+    public string boxId;
+    public string boxname;
+    public string obtainLevel; //문자열로 받아서 구분점을 만들어서 Split을 해서 구분하자
+    public string obtainChance;
+
+    public int requireClickMaxLevel;
+    public int requireClickNextLevel;
+    
+}
+
 
 public class WeaponWrapper
 {

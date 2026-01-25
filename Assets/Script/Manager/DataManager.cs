@@ -1,3 +1,4 @@
+using NUnit.Framework.Constraints;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -9,9 +10,12 @@ using static AddressableTextLoader;
 public class DataManager : MonoSingleton<DataManager>
 {
     public WeaponDataBase WeaponDB { get; private set; } = new WeaponDataBase();
+    public BoxDataBase BoxDB { get; private set; } = new BoxDataBase();
     private Dictionary<string, IItemData> _allItemDic = new Dictionary<string, IItemData>();
+    
 
-    private ItemDataLoader _loader = new ItemDataLoader();
+    private ItemDataLoader loader = new ItemDataLoader();
+    
 
     protected override void Awake() 
     {
@@ -24,11 +28,13 @@ public class DataManager : MonoSingleton<DataManager>
     {
         Debug.Log($"[DataManager] 로딩 완료");
 
-        List<IItemData> loadedItems = await _loader.LoadData("Item_Data");
+        List<IItemData> loadedItems = await loader.LoadData("Item_Data");
+        List<BoxData> loadedBoxs = await loader.LoadBoxData("Box_Data");
+        
         Debug.Log($"[DataManager] 로딩 완료");
 
         List<WeaponData> weaponOnlyList = new List<WeaponData>();
-
+        
         if (loadedItems != null)
         {
             foreach (var item in loadedItems)
@@ -45,6 +51,18 @@ public class DataManager : MonoSingleton<DataManager>
                 }
             }
         }
+
+        if (loadedBoxs != null)
+        { 
+            foreach (var item in loadedBoxs)
+            {
+                if (item is BoxData box)
+                {
+                   
+                }
+            }
+        }
+         
              
         WeaponDB.InitData(weaponOnlyList); //무기는 무기들만 
 
