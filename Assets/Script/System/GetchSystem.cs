@@ -7,7 +7,7 @@ using Unity.VisualScripting;
 
 
 
-public class GetchSystem
+public class GetchSystem : MonoSingleton<GetchSystem>
 {
     private GetchSystem instance;
     public GetchSystem Instance

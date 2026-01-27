@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 
@@ -31,6 +32,22 @@ public class BoxDataBase
 {
     private Dictionary<string, List<BoxData>> boxDic = new Dictionary<string, List<BoxData>>();
 
+    public void Init(List<BoxData> list)
+    {
+        if (list == null)
+        {
+            return;
+        }
+
+        boxDic.Clear();
+
+        foreach (BoxData box in list)
+        {
+            SetBox(box);
+        }
+        
+    }
+
     public void SetBox(BoxData box)
     {
         if (box == null)
@@ -49,7 +66,19 @@ public class BoxDataBase
 
     }
 
+    //·£´ýÀ¸·Î »óÀÚ»Ì±â
+    public BoxData GetRandomBox(string id)
+    {
+        if (boxDic.TryGetValue(id, out List<BoxData> list) && list.Count>0)
+        {
+            return list[UnityEngine.Random.Range(0, list.Count)];
+        }
+
+        return null;
+    }
+
     
+    //ÀÌ¸§À¸·Î Å½»ö
     public BoxData GetBoxTagName(string boxName)
     {
         foreach(var list in boxDic.Values)

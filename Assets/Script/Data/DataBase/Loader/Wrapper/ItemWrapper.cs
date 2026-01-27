@@ -11,8 +11,7 @@ public class ItemWrapper
     public ObjectRank ItemRank;
     public string SpritePath;
 
-    public int DetailType;
-    
+    public int DetailType;    
 }
 
 public class BoxWrpper
@@ -24,6 +23,7 @@ public class BoxWrpper
 
     public int requireClickMaxLevel;
     public int requireClickNextLevel;
+    public string spritePath;
     
 }
 
