@@ -1,6 +1,7 @@
 using Unity.Collections;
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 
 public class ItemWrapper
@@ -12,19 +13,6 @@ public class ItemWrapper
     public string SpritePath;
 
     public int DetailType;    
-}
-
-public class BoxWrpper
-{
-    public string boxId;
-    public string boxname;
-    public string obtainLevel; //문자열로 받아서 구분점을 만들어서 Split을 해서 구분하자
-    public string obtainChance;
-
-    public int requireClickMaxLevel;
-    public int requireClickNextLevel;
-    public string spritePath;
-    
 }
 
 

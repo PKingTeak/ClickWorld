@@ -91,7 +91,7 @@ public static class AddressableTextLoader
 
         public async Task<List<BoxData>> LoadBoxData(string key)
         {
-            List<BoxWrpper> wrappers = await AddressableTextLoader.LoadJsonAsync<BoxWrpper>(key);
+            List<BoxDataSheet> wrappers = await AddressableTextLoader.LoadJsonAsync<BoxDataSheet>(key);
 
             var result = new List<BoxData>();
 
@@ -131,7 +131,7 @@ public static class AddressableTextLoader
         }
 
 
-        private BoxData BoxConvert(BoxWrpper row)
+        private BoxData BoxConvert(BoxDataSheet row)
         {
             var data = new BoxData();
 
@@ -151,7 +151,7 @@ public static class AddressableTextLoader
 
             }
 
-            data.initData(row.boxId,row.boxname, level, chance, int.Parse(row.obtainLevel), int.Parse(row.obtainChance));
+        //    data.initData(row.boxId,row.boxname, level, chance, int.Parse(row.obtainLevel), int.Parse(row.obtainChance));
 
             return data;
         }

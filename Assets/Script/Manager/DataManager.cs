@@ -67,7 +67,7 @@ public class DataManager : MonoSingleton<DataManager>
          
              
         WeaponDB.InitData(weaponOnlyList); //무기는 무기들만 
-        BoxDB.Init(BoxDataList);
+        //BoxDB.Init(BoxDataList);
         Debug.Log($"[DataManager] 데이터 초기화 완료! 로드된 무기 개수: {weaponOnlyList.Count}");
     }
 
