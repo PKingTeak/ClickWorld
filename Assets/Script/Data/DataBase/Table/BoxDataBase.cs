@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using System;
 
 
 public class BoxData
@@ -30,6 +31,7 @@ public class BoxData
 
 public class BoxDataBase
 {
+
     private Dictionary<string, List<BoxData>> boxDic = new Dictionary<string, List<BoxData>>();
 
     public void Init(List<BoxData> list)

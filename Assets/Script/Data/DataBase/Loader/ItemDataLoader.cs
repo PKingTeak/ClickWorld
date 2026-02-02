@@ -103,6 +103,7 @@ public static class AddressableTextLoader
                     
                 }
             }
+            Debug.Log($"[ItemDataLoader]{result.Count}");
             return result;
 
 
@@ -147,6 +148,7 @@ public static class AddressableTextLoader
             for (int i = 0; i < words.Length; i++)
             {
                 chance.Add(int.Parse(words[i]));
+
             }
 
             data.initData(row.boxId,row.boxname, level, chance, int.Parse(row.obtainLevel), int.Parse(row.obtainChance));

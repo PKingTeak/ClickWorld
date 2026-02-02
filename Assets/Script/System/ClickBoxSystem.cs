@@ -11,7 +11,12 @@ public class ClickBoxSystem : MonoBehaviour
     public static event Action OnSummonEnd;
 
 
-    GetchSystem getchSystem = new GetchSystem();
+    GetchSystem getchSystem; //동적 할당 불가능
+
+    private void Start()
+    {
+        getchSystem = GameManager.Instance.GetchSystem;
+    }
 
     [Header("Setting")]
     [SerializeField] private float SummonDuration;
@@ -80,7 +85,7 @@ public class ClickBoxSystem : MonoBehaviour
 
         isSummoning = false; //소환 종료
         Debug.Log($"{curClickCount}");
-        getchSystem.ExecuteGetch(testboxdata,curClickCount);
+        getchSystem.ExecuteGetch(testboxdata, curClickCount); //매니저를 통해서만 호출
         OnSummonEnd?.Invoke();
        
     }

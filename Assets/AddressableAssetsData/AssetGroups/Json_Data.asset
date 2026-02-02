@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: Json_Data
   m_GUID: 071e177b71f048b4abd1017e79076c67
   m_SerializeEntries:
+  - m_GUID: 155894f11f0a8294180f6e69ab967711
+    m_Address: Box_Data
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 15f8526ea7268984f8adf864ecde5c64
     m_Address: Item_Data
     m_ReadOnly: 0

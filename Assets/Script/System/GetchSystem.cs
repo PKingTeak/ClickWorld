@@ -7,7 +7,7 @@ using Unity.VisualScripting;
 
 
 
-public class GetchSystem : MonoSingleton<GetchSystem>
+public class GetchSystem //이거 동적으로 할당해서 사용불가능
 {
     private GetchSystem instance;
     public GetchSystem Instance

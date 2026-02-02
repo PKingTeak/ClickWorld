@@ -1,0 +1,12 @@
+{
+  "Items": [
+    {
+      "boxId": "1",
+      "boxname": "wood_box",
+      "obtainLevel": "0|1|2",
+      "obtainChance": "0.5|0.3|0.2",
+      "requireClickMaxLevel": 30,
+      "requireClickNextLevel": 15
+    }
+  ]
+}

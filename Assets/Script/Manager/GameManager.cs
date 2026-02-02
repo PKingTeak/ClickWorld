@@ -11,6 +11,8 @@ public class GameManager : MonoSingleton<GameManager>
 
     GetchSystem System_Getch;
 
+    public GetchSystem GetchSystem => System_Getch;
+
     public WeaponManager WeaponManager => M_weapon;
 
     protected override void Awake()
@@ -18,7 +20,6 @@ public class GameManager : MonoSingleton<GameManager>
         base.Awake();        
         M_weapon.Init(this);
         System_Getch = new GetchSystem();
-    
     }
 
 

@@ -34,6 +34,7 @@ public class DataManager : MonoSingleton<DataManager>
         Debug.Log($"[DataManager] 로딩 완료");
 
         List<WeaponData> weaponOnlyList = new List<WeaponData>();
+        List<BoxData> BoxDataList = new List<BoxData>();
         
         if (loadedItems != null)
         {
@@ -58,14 +59,15 @@ public class DataManager : MonoSingleton<DataManager>
             {
                 if (item is BoxData box)
                 {
-                   
+                    BoxDataList.Add(box);
+                    
                 }
             }
         }
          
              
         WeaponDB.InitData(weaponOnlyList); //무기는 무기들만 
-
+        BoxDB.Init(BoxDataList);
         Debug.Log($"[DataManager] 데이터 초기화 완료! 로드된 무기 개수: {weaponOnlyList.Count}");
     }
 
