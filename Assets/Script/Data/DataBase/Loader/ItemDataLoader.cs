@@ -4,9 +4,8 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Newtonsoft.Json;
-using TMPro;
 using Unity.VisualScripting;
-
+using UnityEditor.Build.Pipeline.WriteTypes;
 
 
 [Serializable]
@@ -14,6 +13,20 @@ public class ItemRowLIst<T>
 {
     public List<T> items;
 }
+
+[Serializable]
+public class ItemData : IItemData
+{
+    public int id;
+    [field: SerializeField] public string ItemName { get; set; }
+    [field: SerializeField] public string ItemInfo { get; set; }
+    [field: SerializeField] public ItemCategory ItemType { get; set; }
+    [field: SerializeField] public ObjectRank ItemRank { get; set; }
+    [field: SerializeField] public Sprite ItemSprite { get; set; }
+    public string spriteKey; // 어드레서블 키
+    public int value;        // 수치값 (공격력 등)
+}
+
 
 
 public static class AddressableTextLoader
@@ -60,31 +73,56 @@ public static class AddressableTextLoader
     }
     public class ItemDataLoader
     {
+        private async Task<string> LoadTextAsync(string key)
+        {
+            var handle = Addressables.LoadAssetAsync<TextAsset>(key);
+            TextAsset txt = await handle.Task;
+
+            if (handle.Status == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded && txt != null)
+            {
+                string result = txt.text;
+                Addressables.Release(handle);
+                return result;
+            }
+            Debug.LogError($"[Loader] {key}로드 실패");
+            Addressables.Release(handle);
+            return null;
+        }
+
+
         public async Task<List<IItemData>> LoadData(string key)
         {
-            // 1. JSON 로드 (위의 깔끔해진 함수 사용)
-            List<ItemWrapper> wrappers = await AddressableTextLoader.LoadJsonAsync<ItemWrapper>(key);
+            var handle = Addressables.LoadAssetAsync<TextAsset>(key);
+            TextAsset txt = await handle.Task;
 
             var result = new List<IItemData>();
 
-            // 2. 데이터 변환 (Wrapper -> ScriptableObject)
-            if (wrappers != null)
+            if (handle.Status == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded && txt != null)
             {
-                foreach (var row in wrappers)
-                {
-                    switch (row.ItemCategory)
-                    {
-                        case ItemCategory.WeaponItem:
-                            result.Add(WeaponConvert(row));
-                            //무기 정보를 넘겨 줘야함
-                            break;
+                string json = txt.text;
+                Addressables.Release(handle);
 
-                        case ItemCategory.PetItem:
-                            //아직 미구현
-                            break;
+                var wrapperList = JsonConvert.DeserializeObject<ItemRowLIst<ItemWrapper>>(json);
+
+                if (wrapperList != null && wrapperList.items != null)
+                {
+                    foreach (var wrapper in wrapperList.items)
+                    {
+                        ItemData newItem = WeaponConvert(wrapper);
+                        if (newItem != null)
+                        {
+                            result.Add(newItem);
+                        }
                     }
                 }
             }
+            else
+            {
+                Debug.LogError($"[Loader] 아이템 JSON({key}) 로드 실패");
+                if (handle.IsValid()) Addressables.Release(handle);
+            }
+
+            Debug.Log($"[Loader] 아이템 {result.Count}개 로드 완료");
             return result;
 
         }
@@ -100,7 +138,7 @@ public static class AddressableTextLoader
                 foreach (var row in wrappers)
                 {
                     result.Add(BoxConvert(row));
-                    
+
                 }
             }
             Debug.Log($"[ItemDataLoader]{result.Count}");
@@ -111,51 +149,76 @@ public static class AddressableTextLoader
 
 
         // Wrapper 데이터를 실제 게임 데이터(ScriptableObject)로 변환
-        private WeaponData WeaponConvert(ItemWrapper row)
-        {
-            var data = ScriptableObject.CreateInstance<WeaponData>();
-
-            var rank = row.ItemRank;
-
-            WeaponType type = (WeaponType)row.DetailType;
-
-            // 이미지 로드 (경로가 있을 때만)
-            Sprite sprite = null;
-            if (!string.IsNullOrEmpty(row.SpritePath))
-            {
-                sprite = Resources.Load<Sprite>(row.SpritePath);
-            }
-
-            data.Init(row.ItemName, row.ItemInfo, type, rank, sprite);
-            return data;
+        private ItemData WeaponConvert(ItemWrapper row)
+        { 
+            ItemData data = new ItemData();
+            data.id = row.DetailType;
+            data.ItemName = row.ItemName;
+            data.ItemInfo = row.ItemInfo;
+            data.ItemRank = row.ItemRank;
+            data.ItemType = row.ItemCategory;
+            data.spriteKey = row.SpritePath;
+            data.ItemSprite = null;
+            return data;            
+            
         }
 
 
         private BoxData BoxConvert(BoxDataSheet row)
         {
             var data = new BoxData();
-
-            List<int> level = new List<int>();
-            List<float> chance = new List<float>();
-
-            string[] words = row.obtainLevel.Split('|');
-            for (int i = 0; i < words.Length; i++)
+            if (int.TryParse(row.boxId, out var parseID))
             {
-                level.Add(int.Parse(words[i]));
+                data.boxID = parseID;
             }
+            data.boxname = row.boxname;
+            data.spritePath = row.spritePath;
+            data.obtainLevel = ParseIntList(row.obtainLevel);
+            data.obtainChance = parseFloatList(row.obtainChance);
+            data.requireClickMaxLevel = ParseIntList(row.requireClickMaxLevel);
+            data.requireClickNextLevel = ParseIntList(row.requireClickNextLevel);
 
-            words = row.obtainChance.Split('|');
-            for (int i = 0; i < words.Length; i++)
-            {
-                chance.Add(int.Parse(words[i]));
-
-            }
-
-        //    data.initData(row.boxId,row.boxname, level, chance, int.Parse(row.obtainLevel), int.Parse(row.obtainChance));
-
+            data.spritePath = row.spritePath;
+            data.boxsprite = null;
             return data;
+
         }
 
+
+        private List<int> ParseIntList(string str)
+        {
+            var list = new List<int>();
+            if (string.IsNullOrEmpty(str))
+            {
+                return list;
+            }
+
+            foreach (var s in str.Split('|'))
+            {
+                list.Add(int.Parse(s));
+            }
+
+            return list;
+        }
+
+        private List<float> parseFloatList(string str)
+        {
+            var list = new List<float>();
+            if (string.IsNullOrEmpty(str))
+            {
+                return list;
+            }
+
+            foreach (var s in str)
+            {
+                if (float.TryParse(s, out float value))
+                {
+                    list.Add(value);
+                }
+            }
+
+            return list;
+        }
 
 
     }

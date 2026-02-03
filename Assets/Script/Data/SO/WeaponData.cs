@@ -13,8 +13,7 @@ public enum WeaponType
 
 
 
-[CreateAssetMenu(fileName = "SOData" , menuName = "SOData/Weapon")]
-public class WeaponData : ScriptableObject , IItemData
+public class WeaponData :  IItemData
 {
     [SerializeField]
     private string m_WeaponName;
@@ -28,6 +27,8 @@ public class WeaponData : ScriptableObject , IItemData
     private ObjectRank m_WeaponRank;
     [SerializeField]
     private Sprite m_WeaponSprite;
+
+
     public string ItemName => m_WeaponName;
     public string ItemInfo => m_WeaponInfo;
     public ItemCategory ItemType => m_ItemType;
@@ -36,15 +37,18 @@ public class WeaponData : ScriptableObject , IItemData
     public ObjectRank ItemRank => m_WeaponRank;
     public Sprite ItemSprite => m_WeaponSprite;
 
+  
 
-    public void Init(string name, string info, WeaponType type, ObjectRank rank, Sprite sprite)
+
+    public void Init(string name, string info, int weaponType, ObjectRank rank, Sprite sprite)
     {
         m_WeaponName = name;
         m_WeaponInfo = info;
         m_ItemType = ItemCategory.WeaponItem; //어쩌피 무기니까
-        m_WeaponType = type;
+        m_WeaponType = (WeaponType)weaponType;
         m_WeaponRank = rank;
         m_WeaponSprite = sprite;
+    
     }
 }
 

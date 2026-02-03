@@ -65,7 +65,29 @@ public class BoxDataBase
 
     private Dictionary<int, List<BoxData>> boxDic = new Dictionary<int, List<BoxData>>();
 
-  
+
+    public void Init(List<BoxData> list)
+    {
+        if (list == null) return;
+
+        boxDic.Clear();
+
+        foreach (BoxData box in list)
+        {
+            if (box == null) continue;
+
+            // 딕셔너리에 키가 없으면 리스트 생성
+            if (!boxDic.ContainsKey(box.boxID))
+            {
+                boxDic.Add(box.boxID, new List<BoxData>());
+            }
+
+            // 리스트에 박스 데이터 추가
+            boxDic[box.boxID].Add(box);
+        }
+
+        Debug.Log($"[BoxDataBase] {list.Count}개의 상자 데이터 저장 완료.");
+    }
     public void LoadBoxData(string jsonString, Dictionary<int,IItemData> ItemMap)
     {
         boxDic.Clear();
@@ -120,6 +142,8 @@ public class BoxDataBase
                 boxDic.Add(newBox.boxID, new List<BoxData>());
             }
 
+
+            boxDic[newBox.boxID].Add(newBox);
 
         }
 

@@ -2,6 +2,8 @@ using NUnit.Framework.Constraints;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using static AddressableTextLoader;
 
 
@@ -9,68 +11,79 @@ using static AddressableTextLoader;
 
 public class DataManager : MonoSingleton<DataManager>
 {
+
+    private ItemDataLoader _loader = new ItemDataLoader();
     public WeaponDataBase WeaponDB { get; private set; } = new WeaponDataBase();
     public BoxDataBase BoxDB { get; private set; } = new BoxDataBase();
     private Dictionary<string, IItemData> _allItemDic = new Dictionary<string, IItemData>();
-    
 
-    private ItemDataLoader loader = new ItemDataLoader();
-    
+    private const string ITEM_DATA_KEY = "Item_Data";
+    private const string BOX_DATA_KEY = "Box_Data";
 
-    protected override void Awake() 
+
+
+    protected override void Awake()
     {
         base.Awake();
         // 게임 시작 시 비동기 로딩 시작
-        _ = InitDataAsync();
+        _ = LoadAllData();
     }
 
-    private async Task InitDataAsync()
+    private async Task LoadAllData()
     {
-        Debug.Log($"[DataManager] 로딩 완료");
+        List<IItemData> loadedItems = await _loader.LoadData(ITEM_DATA_KEY);
 
-        List<IItemData> loadedItems = await loader.LoadData("Item_Data");
-        List<BoxData> loadedBoxs = await loader.LoadBoxData("Box_Data");
-        
-        Debug.Log($"[DataManager] 로딩 완료");
-
-        List<WeaponData> weaponOnlyList = new List<WeaponData>();
-        List<BoxData> BoxDataList = new List<BoxData>();
-        
         if (loadedItems != null)
-        {
-            foreach (var item in loadedItems)
-            {
-
-                if (item is WeaponData weapon)
-                {
-
-                    weaponOnlyList.Add(weapon);
-                    if (!_allItemDic.ContainsKey(weapon.name))
-                    {
-                        _allItemDic.Add(weapon.name, weapon);
-                    }
-                }
-            }
-        }
-
-        if (loadedBoxs != null)
         { 
-            foreach (var item in loadedBoxs)
+        foreach (var item in loadedItems)
             {
-                if (item is BoxData box)
+                ItemData newItem = (ItemData)item;
+                if (newItem != null && !string.IsNullOrEmpty(newItem.spriteKey))
                 {
-                    BoxDataList.Add(box);
-                    
+                    newItem.ItemSprite = await LoadSpriteAsync(newItem.spriteKey);
+                }
+                
+            }
+
+            WeaponDB.InitData(loadedItems);
+            Debug.Log($"[DataManager] 아이템 {loadedItems.Count}개 등록 완료.");
+        }
+
+        //박스데이터 로드 
+        List<BoxData> loadedBoxes = await _loader.LoadBoxData(BOX_DATA_KEY);
+
+        if (loadedBoxes != null)
+        {
+            foreach (var box in loadedBoxes)
+            {
+                if (!string.IsNullOrEmpty(box.spritePath))
+                {
+                    box.boxsprite = await LoadSpriteAsync(box.spritePath);
                 }
             }
         }
-         
-             
-        WeaponDB.InitData(weaponOnlyList); //무기는 무기들만 
-        //BoxDB.Init(BoxDataList);
-        Debug.Log($"[DataManager] 데이터 초기화 완료! 로드된 무기 개수: {weaponOnlyList.Count}");
+
+        BoxDB.Init(loadedBoxes);
+        Debug.Log($"[DataManager] 상자 {loadedBoxes.Count}개 등록 완료.");
     }
 
+
+
+    private async Task<Sprite> LoadSpriteAsync(string key)
+    {
+        var handle = Addressables.LoadAssetAsync<Sprite>(key);
+        Sprite sprite = await handle.Task;
+        if (handle.Status == AsyncOperationStatus.Succeeded)
+        {
+            return sprite;
+        }
+        else 
+        {
+            Debug.LogWarning($"[DataManager] 이미지 로드 실패: {key}");
+            return null;
+        }
+        
+    }
 
     public IItemData GetItem(string name) //인벤토리에는 어쩌피 아이템 데이터가 들어가니까 
     {

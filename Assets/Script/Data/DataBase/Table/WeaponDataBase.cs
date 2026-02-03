@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class WeaponDataBase
 {
-    private Dictionary<ObjectRank, List<WeaponData>> weaponDic = new Dictionary<ObjectRank, List<WeaponData>>();
+    private Dictionary<ObjectRank, List<IItemData>> weaponDic = new Dictionary<ObjectRank, List<IItemData>>();
 
     public WeaponDataBase()
     {
@@ -11,7 +11,7 @@ public class WeaponDataBase
     
     }
 
-    public void InitData(List<WeaponData> list)
+    public void InitData(List<IItemData> list)
     {
         if (list == null)
         {
@@ -25,7 +25,7 @@ public class WeaponDataBase
 
             if (!weaponDic.ContainsKey(rank))
             {
-                weaponDic[rank] = new List<WeaponData>();
+                weaponDic[rank] = new List<IItemData>();
             }
             weaponDic[rank].Add(weapon);
 
@@ -33,7 +33,7 @@ public class WeaponDataBase
     }
 
 
-    public WeaponData GetRandomWeaponByRank(ObjectRank rank)
+    public IItemData GetRandomWeaponByRank(ObjectRank rank)
     {
         if (weaponDic.ContainsKey(rank) && weaponDic[rank].Count > 0)
         {
