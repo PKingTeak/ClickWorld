@@ -4,8 +4,6 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Newtonsoft.Json;
-using Unity.VisualScripting;
-using UnityEditor.Build.Pipeline.WriteTypes;
 
 
 [Serializable]
@@ -209,7 +207,7 @@ public static class AddressableTextLoader
                 return list;
             }
 
-            foreach (var s in str)
+            foreach (var s in str.Split('|'))
             {
                 if (float.TryParse(s, out float value))
                 {
