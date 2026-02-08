@@ -1,19 +1,6 @@
 using System;
 using UnityEngine;
 
-public interface IItemData
-{ 
-    string ItemName { get; }
-
-    string ItemInfo { get; }
-
-    ItemCategory ItemType { get; }
-    
-    ObjectRank ItemRank { get; }
-
-    Sprite ItemSprite { get; }
-}
-
 
 public static class EventBus
 {

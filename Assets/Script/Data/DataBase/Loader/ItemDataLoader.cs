@@ -5,6 +5,20 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Newtonsoft.Json;
 
+public interface IItemData
+{
+    string ItemName { get; }
+
+    string ItemInfo { get; }
+
+    ItemCategory ItemType { get; }
+
+    ObjectRank ItemRank { get; }
+
+    Sprite ItemSprite { get; }
+}
+
+
 
 [Serializable]
 public class ItemRowLIst<T>

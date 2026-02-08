@@ -31,6 +31,11 @@ public class ClickBoxSystem : MonoBehaviour
     [SerializeField] private BoxData testboxdata; //나중에 리스트로 변경 예정 지금 
 
 
+    [Header("연결 시스템")]
+    [SerializeField] private LightEffectSystem lightEffect;
+    [SerializeField] private BoxParticleSystem boxParticle;
+
+
     [ContextMenu("Test Start Summon")]
     public void StartSummon()
     {
@@ -65,6 +70,11 @@ public class ClickBoxSystem : MonoBehaviour
             return;
         }
 
+        lightEffect.UpdateVisual(curClickCount);
+
+        Color currentRankColor = Color.white; //추후 상자 데이터와 연동해서 각 등급별로 색상을 다르게 지정할예정
+        boxParticle.UpdateParticle(curClickCount, currentRankColor);
+
         curClickCount++;
         VisualDot();
         OnBoxClicked?.Invoke(curClickCount);
@@ -88,6 +98,20 @@ public class ClickBoxSystem : MonoBehaviour
         getchSystem.ExecuteGetch(testboxdata, curClickCount); //매니저를 통해서만 호출
         OnSummonEnd?.Invoke();
        
+    }
+
+    private void ChangeBoxEffect()
+    {
+           
+        for (int i = 0; i < testboxdata.requireClickNextLevel.Count; i++)
+        {
+            if (testboxdata.requireClickNextLevel[i] < curClickCount)
+            { 
+                //이펙트 변화
+            }
+        }
+
+        
     }
      
     private void VisualDot()

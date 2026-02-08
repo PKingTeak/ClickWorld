@@ -6,25 +6,11 @@ public class Effects : MonoBehaviour
     
 }
 
-public class EffectManager
+public class EffectManager : MonoSingleton<EffectManager>
 {
     [SerializeField]
     private Effects TestEffect;
 
-    private PoolingSystem<Effects> effectPoolingQ = new();
-
-    private EffectManager instance;
-    public EffectManager Instance
-    {
-        get
-        { 
-            if (instance == null)
-            {
-                instance = new EffectManager();
-            }
-            return instance;
-        }
-    }
    
 
 
