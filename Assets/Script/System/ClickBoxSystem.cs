@@ -28,13 +28,26 @@ public class ClickBoxSystem : MonoBehaviour
     //박스도 등급에 따라서 시간을 정해야될듯
 
     [Header("박스 정보")]
-    [SerializeField] private BoxData testboxdata; //나중에 리스트로 변경 예정 지금 
+    [SerializeField]
+    private BoxData boxData;
+
+    private int maxClickCount;
+    //  [SerializeField] private BoxData testboxdata; //나중에 리스트로 변경 예정 지금 
 
 
     [Header("연결 시스템")]
     [SerializeField] private LightEffectSystem lightEffect;
     [SerializeField] private BoxParticleSystem boxParticle;
 
+
+    //박스 정보를 가져오는 기능이 없음. 
+
+    public void Init(BoxData data) // 상자 클릭 부분으로 넘어갈때? init하기?
+    {
+        boxData = data;
+        maxClickCount = data.rankRatio.Count * data.requireClickNextLevel; 
+        
+    }
 
     [ContextMenu("Test Start Summon")]
     public void StartSummon()
@@ -73,6 +86,8 @@ public class ClickBoxSystem : MonoBehaviour
         lightEffect.UpdateVisual(curClickCount);
 
         Color currentRankColor = Color.white; //추후 상자 데이터와 연동해서 각 등급별로 색상을 다르게 지정할예정
+        //추후 상자의 현재 클릭수 /최대 클릭 가능수 값을 넘겨 받아서 lerp할 예정
+        float ratio =  SettingRatio(curClickCount, maxClickCount);
         boxParticle.UpdateParticle(curClickCount, currentRankColor);
 
         curClickCount++;
@@ -95,23 +110,16 @@ public class ClickBoxSystem : MonoBehaviour
 
         isSummoning = false; //소환 종료
         Debug.Log($"{curClickCount}");
-        getchSystem.ExecuteGetch(testboxdata, curClickCount); //매니저를 통해서만 호출
+        getchSystem.ExecuteGetch(boxData, curClickCount); //매니저를 통해서만 호출
         OnSummonEnd?.Invoke();
        
     }
 
-    private void ChangeBoxEffect()
+    private float SettingRatio(int _curClick, int maxRequire)
     {
-           
-        for (int i = 0; i < testboxdata.requireClickNextLevel.Count; i++)
-        {
-            if (testboxdata.requireClickNextLevel[i] < curClickCount)
-            { 
-                //이펙트 변화
-            }
-        }
+        float value = Mathf.Clamp01((float)_curClick / (float)maxRequire);
 
-        
+        return value;
     }
      
     private void VisualDot()

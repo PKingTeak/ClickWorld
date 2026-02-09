@@ -14,7 +14,7 @@ public class BoxDataSheet
     public string obtainLevel; //문자열로 받아서 구분점을 만들어서 Split을 해서 구분하자
     public string obtainChance;
 
-    public string requireClickMaxLevel;
+    public string rankRatio;
     public string requireClickNextLevel;
     public string spritePath;
 
@@ -44,12 +44,12 @@ public class BoxData
    
 
     [Header("클릭 관련 정보")]
-    public List<int> requireClickMaxLevel = new List<int>();
-    public List<int> requireClickNextLevel = new List<int>();
+    public List<int> rankRatio = new List<int>(); //등장 확률
+    public int requireClickNextLevel; //이거 int값으로 하고 모든 등급 등급업 동일하게 
 
 
     [Header("드랍 테이븦")]
-    public List<DropItemInfo> dropTable = new List<DropItemInfo>();
+    public List<DropItemInfo> dropTable = new List<DropItemInfo>(); //나오는 등급들
  
 }
 
@@ -112,8 +112,8 @@ public class BoxDataBase
             }
 
             newBox.boxname = sheet.boxname;
-            newBox.requireClickMaxLevel = ParssingToList(sheet.requireClickMaxLevel);
-            newBox.requireClickNextLevel = ParssingToList(sheet.requireClickNextLevel);
+            newBox.rankRatio = ParssingToList(sheet.rankRatio);
+            newBox.requireClickNextLevel = Convert.ToInt32(sheet.requireClickNextLevel);
 
             newBox.spritePath = sheet.spritePath;
             newBox.boxsprite = null;

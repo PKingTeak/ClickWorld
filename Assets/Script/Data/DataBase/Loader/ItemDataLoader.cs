@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Newtonsoft.Json;
+using Unity.VisualScripting.Antlr3.Runtime;
 
 public interface IItemData
 {
@@ -187,8 +188,8 @@ public static class AddressableTextLoader
             data.spritePath = row.spritePath;
             data.obtainLevel = ParseIntList(row.obtainLevel);
             data.obtainChance = parseFloatList(row.obtainChance);
-            data.requireClickMaxLevel = ParseIntList(row.requireClickMaxLevel);
-            data.requireClickNextLevel = ParseIntList(row.requireClickNextLevel);
+            data.rankRatio = ParseIntList(row.rankRatio);
+            data.requireClickNextLevel = Convert.ToInt32(row.requireClickNextLevel);
 
             data.spritePath = row.spritePath;
             data.boxsprite = null;
