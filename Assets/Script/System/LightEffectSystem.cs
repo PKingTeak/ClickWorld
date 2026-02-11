@@ -29,7 +29,7 @@ public class LightEffectSystem : MonoBehaviour
 
 
     //머티리얼 설정
-    Renderer renderer;
+    Renderer Boxrenderer;
     MaterialPropertyBlock materialBox;
 
     //박스 
@@ -38,7 +38,7 @@ public class LightEffectSystem : MonoBehaviour
 
     private void Awake()
     {
-        renderer = GetComponent<Renderer>();
+        Boxrenderer = GetComponent<Renderer>();
         materialBox = new MaterialPropertyBlock(); //컴포넌트가 아님
     }
 
@@ -53,7 +53,7 @@ public class LightEffectSystem : MonoBehaviour
     public void UpdateVisual(int currentTotalClicks) //박스 클릭시 변화 및 이펙트 변경
     {
 
-        if (renderer == null) return;
+        if (Boxrenderer == null) return;
 
         // 1. [MAX LEVEL CHECK] 최대 클릭 수 도달 시
         if (currentTotalClicks >= maxRequire)
@@ -94,10 +94,10 @@ public class LightEffectSystem : MonoBehaviour
 
     private void ApplyShader(float ratio, Color color)
     {
-        renderer.GetPropertyBlock(materialBox);
+        Boxrenderer.GetPropertyBlock(materialBox);
         materialBox.SetFloat(amountPropName,ratio);
         materialBox.SetColor(baseColor, color);
-        renderer.SetPropertyBlock(materialBox);
+        Boxrenderer.SetPropertyBlock(materialBox);
     }
 
 }

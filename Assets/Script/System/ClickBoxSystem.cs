@@ -12,12 +12,6 @@ public class ClickBoxSystem : MonoBehaviour
 
 
     GetchSystem getchSystem; //동적 할당 불가능
-
-    private void Start()
-    {
-        getchSystem = GameManager.Instance.GetchSystem;
-    }
-
     [Header("Setting")]
     [SerializeField] private float SummonDuration;
 
@@ -38,15 +32,40 @@ public class ClickBoxSystem : MonoBehaviour
     [Header("연결 시스템")]
     [SerializeField] private LightEffectSystem lightEffect;
     [SerializeField] private BoxParticleSystem boxParticle;
+    private SpriteRenderer spriteRenderer;
 
 
     //박스 정보를 가져오는 기능이 없음. 
 
+
+    private void Awake()
+    {
+        getchSystem = GameManager.Instance.GetchSystem;
+        spriteRenderer = GetComponent<SpriteRenderer>();
+
+    }
     public void Init(BoxData data) // 상자 클릭 부분으로 넘어갈때? init하기?
     {
+        if (data == null)
+        {
+            Debug.Log("[ClickBoxSystem] 데이터가 비어있습니다.");
+            return;
+        }
         boxData = data;
         maxClickCount = data.rankRatio.Count * data.requireClickNextLevel; 
-        
+
+        if (spriteRenderer != null && data.boxsprite != null)
+        {
+            spriteRenderer.sprite = data.boxsprite;
+        }
+
+        if (boxParticle != null)
+        {
+            boxParticle.gameObject.SetActive(true);
+            boxParticle.UpdateParticle(0, Color.white);
+        }
+
+        Debug.Log($"[{data.boxname}] 상자가 세팅되었습니다. (목표 클릭: {maxClickCount})");
     }
 
     [ContextMenu("Test Start Summon")]
@@ -83,14 +102,15 @@ public class ClickBoxSystem : MonoBehaviour
             return;
         }
 
-        lightEffect.UpdateVisual(curClickCount);
+        curClickCount++;
 
         Color currentRankColor = Color.white; //추후 상자 데이터와 연동해서 각 등급별로 색상을 다르게 지정할예정
-        //추후 상자의 현재 클릭수 /최대 클릭 가능수 값을 넘겨 받아서 lerp할 예정
         float ratio =  SettingRatio(curClickCount, maxClickCount);
+        lightEffect.UpdateVisual(curClickCount);
+
+        //추후 상자의 현재 클릭수 /최대 클릭 가능수 값을 넘겨 받아서 lerp할 예정
         boxParticle.UpdateParticle(curClickCount, currentRankColor);
 
-        curClickCount++;
         VisualDot();
         OnBoxClicked?.Invoke(curClickCount);
     }
